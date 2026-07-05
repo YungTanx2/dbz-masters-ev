@@ -1,0 +1,16 @@
+{
+  "_comment": "Standard DBS Masters BT booster box (24 packs x 12 cards) — confirmed live from TCGCSV Booster Box 'Description' extendedData for BT28 and BT31 ('Each ... Booster Pack contains 12 cards. Each ... Booster Box contains 24 Booster Packs.'). Per-pack filler composition (7 Common + 3 Uncommon + 1 Rare + 1 variable hit slot) and all hitDistribution rates below are ROUGH ESTIMATES — Bandai publishes only per-set unique-card-type counts (e.g. BT28: 50 Common/40 Uncommon/34 Rare/18 SR/15 SPR/10 SLR/5 Concept/3 SCR/2 GDR), never pull probabilities. Rates aggregated from community pull-rate research (ProGamingCrew, BleedingCool 'Ultimate Squad' pull-rate quest series): ~5 Super Rare/box + ~2 Special Rare/box guaranteed floor, Secret Rare ~1-2 per 12-box case, God Rare ~1 per 3-6 cases. Special Leader Rare and Concept Rare have no published community data — estimated by analogy to Special Rare's rarity tier (similar ~10-15 unique-card pool size per set). ALL 4 supported sets (BT28-31) inherit these rates unchanged and are flagged isPlaceholder=true. Override per-set via the in-UI Pull Rates modal, or replace these numbers once real box-break data is available.",
+  "packsPerBox": 24,
+  "commonCount": 7,
+  "uncommonCount": 3,
+  "rareCount": 1,
+  "hitDistribution": {
+    "Super Rare":          { "oneInXPacks": 4.8,  "_comment": "~5 SR per box (community-cited guaranteed floor)" },
+    "Special Rare":        { "oneInXPacks": 12,    "_comment": "~2 SPR per box (community-cited guaranteed floor)" },
+    "Special Leader Rare": { "oneInXPacks": 24,    "_comment": "~1 SLR per box — no official data; estimated by analogy to SPR's rarity tier (similar unique-card pool size)" },
+    "Concept Rare":        { "oneInXPacks": 20,    "_comment": "~1.2 Concept Rare per box — newer tier (BT26+ era), no official data" },
+    "Secret Rare":         { "oneInXPacks": 144,   "_comment": "~1 SCR per 6 boxes (community: 1-2 per 12-box case)" },
+    "God Rare":            { "oneInXPacks": 1200,  "_comment": "~1 GDR per 50 boxes (community: 1 per 3-6 cases = 36-72 boxes; midpoint used)" }
+  },
+  "_placeholder": true
+}
