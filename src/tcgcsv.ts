@@ -68,6 +68,19 @@ const NON_BOOSTER_RE = new RegExp([
 ].join(''), 'i');
 
 /**
+ * Manual per-productId rarity corrections for individual TCGCSV data errors.
+ * Add an entry here when a specific card's extendedData.Rarity is wrong and the
+ * mistake is isolated to that one product — NOT for a systemic naming pattern
+ * (those belong in resolveRarity's general logic instead).
+ *
+ * - 702599 "SS Gogeta, Hell-Piercing Flash" (BT31-149): TCGCSV lists this as
+ *   Concept Rare; user confirmed (2026-07-05) it is actually Secret Rare.
+ */
+const RARITY_OVERRIDES = new Map<number, Rarity>([
+  [702599, 'Secret Rare'],
+]);
+
+/**
  * Resolve a DBS Masters card's final Rarity bucket, or null if non-booster.
  *
  * Unlike One Piece/Digimon, DBS Masters does NOT require product-name-suffix
@@ -76,14 +89,12 @@ const NON_BOOSTER_RE = new RegExp([
  * Leader Rare), "(SCR)" (Secret Rare), and "(GDR)" (God Rare) treatments —
  * verified by dumping BT28–BT31 live and cross-checking every suffixed product's
  * extendedData.Rarity against its name (2026-07-05). The suffix is purely a
- * cosmetic abbreviation of the (already correct) base rarity.
- *
- * This function still takes `productName` for the NON_BOOSTER_RE safety-net
- * check and to keep the call signature consistent with sibling Bandai sites.
+ * cosmetic abbreviation of the (already correct) base rarity. A small number of
+ * individual products still have incorrect data — see RARITY_OVERRIDES above.
  */
-function resolveRarity(baseRarity: string, productName: string): Rarity | null {
+function resolveRarity(baseRarity: string, productName: string, productId: number): Rarity | null {
   if (NON_BOOSTER_RE.test(productName)) return null;
-  return baseRarity as Rarity;
+  return RARITY_OVERRIDES.get(productId) ?? (baseRarity as Rarity);
 }
 
 const HEADERS = { 'User-Agent': 'dbz-masters-ev/1.0' };
@@ -121,7 +132,7 @@ export function extractCards(products: TCGProduct[]): { name: string; rarity: Ra
   for (const product of products) {
     const base = extractBaseRarity(product.extendedData);
     if (!base) continue;
-    const rarity = resolveRarity(base, product.name);
+    const rarity = resolveRarity(base, product.name, product.productId);
     if (rarity === null) continue;
     cards.push({ name: product.name, rarity });
   }
@@ -159,7 +170,7 @@ export function matchPrices(products: TCGProduct[], prices: TCGPrice[]): PriceEn
     const base = extractBaseRarity(product.extendedData);
     if (!base) continue; // skip sealed products
 
-    const rarity = resolveRarity(base, product.name);
+    const rarity = resolveRarity(base, product.name, product.productId);
     if (rarity === null) continue; // skip non-booster products
 
     const image = product.imageUrl ?? undefined;
